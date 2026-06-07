@@ -32,13 +32,13 @@ Single-project static web app. Runtime code under `src/{engine,game,ui}`, conten
 
 **Purpose**: Project initialization, tooling, and quality gates (no app logic yet)
 
-- [ ] T001 Create the project directory structure per plan.md: `src/engine/`, `src/game/`, `src/ui/`, `styles/`, `tests/unit/`, `tests/property/`, `tests/ui/`
-- [ ] T002 Create `package.json` with dev-only devDependencies (typescript, eslint, prettier, vitest, @vitest/coverage-v8, fast-check, jsdom) and scripts: `test`, `coverage`, `typecheck`, `lint`, `format`; declare zero runtime dependencies
-- [ ] T003 [P] Create `tsconfig.json` enabling `checkJs`, `noEmit`, strict type options for JSDoc static typing across `src/`
-- [ ] T004 [P] Create `.eslintrc` + `.prettierrc` including `no-restricted-imports`/import-boundary rules forbidding `src/engine` from importing `src/game` or `src/ui`, and `src/game` from importing `src/ui`
-- [ ] T005 [P] Create `vitest.config.js` with V8 coverage and per-path thresholds: 100% for `src/engine/**`, ≥80% overall; jsdom environment for `tests/ui/**`
-- [ ] T006 [P] Create static app shell `index.html` (loads `src/ui/app.js` via `<script type="module">`) and `styles/main.css` skeleton (placeholders; WCAG AA tokens)
-- [ ] T007 [P] Create CI workflow `.github/workflows/ci.yml` running `typecheck`, `lint`, `test`, and `coverage` (gates block merge per Constitution Dev Workflow)
+- [X] T001 Create the project directory structure per plan.md: `src/engine/`, `src/game/`, `src/ui/`, `styles/`, `tests/unit/`, `tests/property/`, `tests/ui/`
+- [X] T002 Create `package.json` with dev-only devDependencies (typescript, eslint, prettier, vitest, @vitest/coverage-v8, fast-check, jsdom) and scripts: `test`, `coverage`, `typecheck`, `lint`, `format`; declare zero runtime dependencies
+- [X] T003 [P] Create `tsconfig.json` enabling `checkJs`, `noEmit`, strict type options for JSDoc static typing across `src/`
+- [X] T004 [P] Create `.eslintrc` + `.prettierrc` including `no-restricted-imports`/import-boundary rules forbidding `src/engine` from importing `src/game` or `src/ui`, and `src/game` from importing `src/ui`
+- [X] T005 [P] Create `vitest.config.js` with V8 coverage and per-path thresholds: 100% for `src/engine/**`, ≥80% overall; jsdom environment for `tests/ui/**`
+- [X] T006 [P] Create static app shell `index.html` (loads `src/ui/app.js` via `<script type="module">`) and `styles/main.css` skeleton (placeholders; WCAG AA tokens)
+- [X] T007 [P] Create CI workflow `.github/workflows/ci.yml` running `typecheck`, `lint`, `test`, and `coverage` (gates block merge per Constitution Dev Workflow)
 
 **Checkpoint**: `npm install`, `npm run typecheck`, and `npm run lint` succeed on the empty skeleton.
 
@@ -51,15 +51,15 @@ Single-project static web app. Runtime code under `src/{engine,game,ui}`, conten
 
 **⚠️ Test-first (Principle III): write the tests in T008–T010 and confirm they FAIL before T011–T016.**
 
-- [ ] T008 [P] Write engine unit tests for address/mask in `tests/unit/address.test.js`: `parseAddress`, `formatAddress`, `prefixToMask`, `maskToPrefix` (incl. rejecting non-contiguous masks), `equivalent` (`/24`≡`255.255.255.0`, leading zeros) — per `contracts/engine.md`
-- [ ] T009 [P] Write engine unit tests for subnet computation in `tests/unit/subnet.test.js`: `subnetInfo`, `usableHosts`, named edge cases /0, /30, **/31 (RFC 3021, 2 usable)**, **/32 (1 usable)**, classful boundaries, `vlsmAllocate`, `supernet`
-- [ ] T010 [P] Write property-based tests in `tests/property/engine.props.test.js` (fast-check) asserting contracts/engine.md guarantees #1–#3 and #6–#7: contiguous mask, `network ≤ firstHost ≤ lastHost ≤ broadcast`, usable-count rule with /31,/32 exceptions across all p∈[0,32], determinism, and that invalid input always throws `EngineError`
-- [ ] T011 Implement `src/engine/address.js`: 32-bit integer parse/format, `prefixToMask`, `maskToPrefix`, `equivalent`, with typed JSDoc and named constants (no magic numbers)
-- [ ] T012 Implement `EngineError` and shared engine constants in `src/engine/errors.js`
-- [ ] T013 Implement `src/engine/special-cases.js`: `/31` and `/32` host logic (RFC 3021 / host routes)
-- [ ] T014 Implement `src/engine/subnet.js`: `subnetInfo`, `usableHosts` (uses special-cases), `vlsmAllocate`, `supernet`
-- [ ] T015 Implement `src/engine/index.js` exposing the public engine surface from `contracts/engine.md` (math functions only at this stage)
-- [ ] T016 Run `npm run coverage` and confirm `src/engine` math reaches 100%; add any missing edge-case tests until green
+- [X] T008 [P] Write engine unit tests for address/mask in `tests/unit/address.test.js`: `parseAddress`, `formatAddress`, `prefixToMask`, `maskToPrefix` (incl. rejecting non-contiguous masks), `equivalent` (`/24`≡`255.255.255.0`, leading zeros) — per `contracts/engine.md`
+- [X] T009 [P] Write engine unit tests for subnet computation in `tests/unit/subnet.test.js`: `subnetInfo`, `usableHosts`, named edge cases /0, /30, **/31 (RFC 3021, 2 usable)**, **/32 (1 usable)**, classful boundaries, `vlsmAllocate`, `supernet`
+- [X] T010 [P] Write property-based tests in `tests/property/engine.props.test.js` (fast-check) asserting contracts/engine.md guarantees #1–#3 and #6–#7: contiguous mask, `network ≤ firstHost ≤ lastHost ≤ broadcast`, usable-count rule with /31,/32 exceptions across all p∈[0,32], determinism, and that invalid input always throws `EngineError`
+- [X] T011 Implement `src/engine/address.js`: 32-bit integer parse/format, `prefixToMask`, `maskToPrefix`, `equivalent`, with typed JSDoc and named constants (no magic numbers)
+- [X] T012 Implement `EngineError` and shared engine constants in `src/engine/errors.js`
+- [X] T013 Implement `src/engine/special-cases.js`: `/31` and `/32` host logic (RFC 3021 / host routes)
+- [X] T014 Implement `src/engine/subnet.js`: `subnetInfo`, `usableHosts` (uses special-cases), `vlsmAllocate`, `supernet`
+- [X] T015 Implement `src/engine/index.js` exposing the public engine surface from `contracts/engine.md` (math functions only at this stage)
+- [X] T016 Run `npm run coverage` and confirm `src/engine` math reaches 100%; add any missing edge-case tests until green
 
 **Checkpoint**: Engine math is implemented, typed, and at 100% coverage. Stories can now begin.
 

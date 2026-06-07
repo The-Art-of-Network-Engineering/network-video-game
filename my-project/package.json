@@ -1,0 +1,25 @@
+{
+  "name": "subnetting-game",
+  "version": "0.1.0",
+  "description": "A browser game that teaches IPv4 subnetting to complete beginners.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . && prettier --check .",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "@vitest/coverage-v8": "^2.1.8",
+    "eslint": "^9.17.0",
+    "fast-check": "^3.23.2",
+    "jsdom": "^25.0.1",
+    "prettier": "^3.4.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}
