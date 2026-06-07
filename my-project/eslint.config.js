@@ -39,8 +39,13 @@ export default [
     },
   },
   {
-    // The game layer must not import the UI layer.
+    // The game layer may read the (universal) performance/Date clocks.
     files: ['src/game/**/*.js'],
+    languageOptions: {
+      globals: {
+        performance: 'readonly',
+      },
+    },
     rules: {
       'no-restricted-imports': [
         'error',
@@ -79,6 +84,8 @@ export default [
         beforeEach: 'readonly',
         afterEach: 'readonly',
         vi: 'readonly',
+        document: 'readonly',
+        window: 'readonly',
       },
     },
   },

@@ -103,6 +103,30 @@ export function maskToPrefix(mask) {
  */
 
 /**
+ * Reduce a textual answer of the given kind to a comparable primitive, throwing
+ * an EngineError on anything malformed. This is the single normalization point
+ * used by both `equivalent` (display) and `grade` (which must tell a malformed
+ * entry apart from a merely-wrong one).
+ * @param {AnswerKind} kind
+ * @param {string} text
+ * @returns {number|string}
+ */
+export function canonicalize(kind, text) {
+  switch (kind) {
+    case 'address':
+      return parseAddress(text.trim());
+    case 'mask':
+      return normalizeMaskToPrefix(text);
+    case 'count':
+      return normalizeCount(text);
+    case 'range':
+      return normalizeRange(text);
+    default:
+      throw new EngineError(`Unknown answer kind: "${kind}"`);
+  }
+}
+
+/**
  * True if two string representations denote the same value of the given kind.
  * Never throws — returns false on anything it cannot interpret.
  * @param {string} a
@@ -112,18 +136,7 @@ export function maskToPrefix(mask) {
  */
 export function equivalent(a, b, kind) {
   try {
-    switch (kind) {
-      case 'address':
-        return parseAddress(normalizeAddressText(a)) === parseAddress(normalizeAddressText(b));
-      case 'mask':
-        return normalizeMaskToPrefix(a) === normalizeMaskToPrefix(b);
-      case 'count':
-        return normalizeCount(a) === normalizeCount(b);
-      case 'range':
-        return normalizeRange(a) === normalizeRange(b);
-      default:
-        return false;
-    }
+    return canonicalize(kind, a) === canonicalize(kind, b);
   } catch {
     return false;
   }
@@ -140,11 +153,6 @@ function normalizeMaskToPrefix(text) {
   const cidr = trimmed.replace(/^\//, '');
   if (/^\d+$/.test(cidr)) return assertPrefix(Number(cidr));
   return maskToPrefix(trimmed);
-}
-
-/** @param {string} text */
-function normalizeAddressText(text) {
-  return text.trim();
 }
 
 /** @param {string} text */

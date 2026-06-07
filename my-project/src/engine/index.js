@@ -14,5 +14,5 @@ export {
   vlsmAllocate,
   supernet,
 } from './subnet.js';
-// Generation & grading are added in the US1 phase:
-// export { generateChallenge, makeDistractors, grade, explain } from './generate.js';
+export { generateChallenge, makeDistractors, grade, explain } from './generate.js';
+export { makeRng, randInt } from './rng.js';
