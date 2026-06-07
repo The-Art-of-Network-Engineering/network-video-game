@@ -10,6 +10,15 @@
 
 > **Core concept (stated, not guessed):** v1 is a single-player, tiered challenge game. The learner solves subnetting problems generated and graded by an authoritative calculation source, receives immediate feedback that explains the correct reasoning, and unlocks harder tiers by demonstrating mastery. A light motivation layer (progress, streaks, tier unlocks) sits on top. If a different framing is wanted (narrative adventure, head-to-head competition, sandbox builder), the spec regenerates; the requirements below are written around this loop.
 
+## Clarifications
+
+### Session 2026-06-07
+
+- Q: What defines "mastery" to unlock the next tier (FR-006)? → A: A streak of consecutive correct answers within the tier (default: 5 in a row, tunable).
+- Q: How does the game teach a concept before testing it (FR-014, beginner audience)? → A: Each new concept opens with a brief, skippable lesson; challenges then reinforce it.
+- Q: Is there time pressure on challenges, or is speed only measured (FR-007)? → A: Speed is measured passively for stats/efficacy; no countdown or time limit in v1.
+- Q: When does answer entry switch from multiple choice to free-text (FR-017)? → A: Per concept — MC introduces a concept, then it switches to free-text before that concept's tier counts as mastered.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Solve a challenge and get instant, explained feedback (Priority: P1)
@@ -80,8 +89,8 @@ As a returning learner, I want my accuracy, speed, and unlocked tiers tracked an
 - **FR-003**: The game MUST grade answers as correct or incorrect and MUST treat equivalent valid representations of the same value as correct (CIDR prefix versus dotted-decimal mask, leading zeros, and similar).
 - **FR-004**: On an incorrect answer, the game MUST present the correct answer together with a step-by-step explanation of how it is derived.
 - **FR-005**: The game MUST return feedback on each submission quickly enough to preserve flow (target stated in Success Criteria).
-- **FR-006**: The game MUST organize challenges into ordered difficulty tiers and MUST gate access to later tiers on demonstrated mastery of earlier ones.
-- **FR-007**: The game MUST track the learner's accuracy and speed and MUST report progress back to the learner.
+- **FR-006**: The game MUST organize challenges into ordered difficulty tiers and MUST gate access to later tiers on demonstrated mastery of earlier ones. Mastery is defined as a streak of consecutive correct answers within the tier (default: 5 in a row, tunable); an incorrect answer resets the current streak.
+- **FR-007**: The game MUST track the learner's accuracy and speed and MUST report progress back to the learner. Speed is measured passively (time-to-answer recorded for statistics and efficacy); v1 imposes no countdown or per-challenge time limit. Timed modes are deferred (see Assumptions).
 - **FR-008**: The game MUST persist progress and unlocked tiers across sessions on the same device, with no account required in v1 (local-only — see Assumptions).
 - **FR-009**: The game MUST correctly handle special prefixes, including /31 point-to-point links and /32 host routes, in both grading and explanations.
 - **FR-010**: The game MUST reject malformed or out-of-range input gracefully and tell the learner the expected format.
@@ -91,9 +100,10 @@ As a returning learner, I want my accuracy, speed, and unlocked tiers tracked an
 - **FR-014**: The game MUST be self-contained for learning: a motivated beginner MUST be able to progress using only the explanations the game provides, without outside reference material.
 - **FR-015**: The game MUST cover the following IPv4 subnetting concepts in v1: binary-to-decimal conversion, subnet mask and CIDR notation, identifying network and broadcast addresses, computing usable host counts and ranges, basic VLSM, and route summarization (supernetting). IPv6 is deferred to a later release.
 - **FR-016**: The game MUST target complete beginners with no prior networking knowledge: the difficulty floor MUST start from first principles, the tone MUST be plain-first (everyday phrasing leads, the formal term follows), and no concept may be required before the game has taught it.
-- **FR-017**: The game MUST use a mixed answer-entry model that progresses by tier: earlier tiers MUST use multiple choice to build confidence, and later tiers MUST transition to free-text entry. Where multiple choice is used, wrong options MUST represent realistic misconceptions (off-by-one host counts, wrong mask octet, network-versus-broadcast confusion) per the constitution, never random noise.
+- **FR-017**: The game MUST use a mixed answer-entry model scaffolded per concept: when a concept is first introduced its challenges MUST use multiple choice to build confidence, and the same concept MUST switch to free-text entry before its tier can be counted as mastered. Where multiple choice is used, wrong options MUST represent realistic misconceptions (off-by-one host counts, wrong mask octet, network-versus-broadcast confusion) per the constitution, never random noise.
 - **FR-018**: The game MUST make hints available on request; in v1 hints are unlimited and do not reduce the learner's recorded score (see Assumptions).
 - **FR-019**: The game SHOULD record repeated mistakes of the same kind to inform future targeted practice; adaptive remediation itself is deferred beyond v1 (see Assumptions).
+- **FR-020**: The game MUST introduce each new concept with a brief lesson before any challenge requires it, so that a complete beginner is never tested on an untaught concept. The lesson MUST be skippable for learners who already know the material, and MUST be available for review afterward.
 
 ### Key Entities
 
@@ -102,6 +112,7 @@ As a returning learner, I want my accuracy, speed, and unlocked tiers tracked an
 - **Challenge**: a single subnetting task. Holds the given scenario, the concept(s) it tests, its difficulty tier, the canonical correct answer(s), the set of accepted equivalent formats, and its explanation.
 - **Difficulty Tier**: an ordered grouping of challenges that gates progression.
 - **Attempt**: a single submission against a challenge. Holds the submitted value, correctness, and time taken; feeds statistics and mistake detection.
+- **Lesson**: a brief, skippable introduction to a concept, shown before the first challenge that requires it and available for later review.
 - **Explanation**: the step-by-step derivation associated with a challenge or concept, shown on an incorrect answer and available for review.
 - **Progress Record**: the learner's unlocked tiers and accumulated statistics, persisted locally across sessions on the same device.
 
@@ -121,7 +132,7 @@ As a returning learner, I want my accuracy, speed, and unlocked tiers tracked an
 - v1 is single-player and self-paced. No multiplayer, social, or leaderboard features.
 - **Audience (resolved, FR-016)**: complete beginners with no prior networking knowledge; difficulty starts from first principles with a plain-first tone.
 - **Topic scope (resolved, FR-015)**: IPv4 only in v1 — binary↔decimal, mask/CIDR notation, network & broadcast addresses, usable host counts & ranges, basic VLSM, and route summarization (supernetting). IPv6 deferred.
-- **Answer entry (resolved, FR-017)**: mixed by tier — multiple choice in early tiers, free-text in later tiers; MC distractors model realistic misconceptions.
+- **Answer entry (resolved, FR-017)**: mixed and scaffolded per concept — multiple choice introduces a concept, then free-text before that concept's tier is mastered; MC distractors model realistic misconceptions.
 - The core loop is solving engine-verified subnetting challenges with immediate explained feedback, arranged as a difficulty ladder.
 - The motivation layer is light (points, streaks, tier unlocks) rather than a heavy narrative, and is easy to revisit later.
 - **Persistence (default for FR-008)**: progress is saved locally on the learner's device and restored across sessions; no account or login is required in v1. An account-based or cross-device model is out of scope for v1.
@@ -129,6 +140,7 @@ As a returning learner, I want my accuracy, speed, and unlocked tiers tracked an
 - **Wrong-answer flow (default)**: an incorrect submission reveals the correct answer with its derivation and then advances; v1 does not require an unlimited retry-before-reveal mode.
 - **Hints (default for FR-018)**: hints are available on request, unlimited, and not penalized in v1.
 - **Adaptive remediation (default for FR-019)**: v1 records mistake patterns but does not yet adapt the challenge stream; adaptive practice is a later release.
+- **Timed modes (FR-007)**: v1 measures speed passively with no time pressure; opt-in timed/challenge modes are deferred to a later release.
 - Content is in English for v1; localization is out of scope for v1.
 - The learner uses a personal device with a screen and keyboard. Touch support is desirable but keyboard entry is the primary input assumption.
 - No instructor or administrator content-authoring in v1.
