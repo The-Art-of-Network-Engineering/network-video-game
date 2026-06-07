@@ -76,22 +76,22 @@ derivation. Equivalent formats accepted; /31,/32 special-cased; malformed input 
 
 ### Tests for User Story 1 (write first, ensure they fail) ⚠️
 
-- [ ] T017 [P] [US1] Write generation/grading property tests in `tests/property/generate.props.test.js`: every `generateChallenge` output grades its canonical answer correct, exactly one correct MC option, and all distractors grade incorrect & distinct (contracts/engine.md #4, #5)
-- [ ] T018 [P] [US1] Write unit tests for `grade`/`explain` in `tests/unit/grade.test.js`: equivalent-format acceptance, malformed → `EngineError`, explanation steps present and correct for /31,/32
-- [ ] T019 [P] [US1] Write session unit tests in `tests/unit/session.test.js`: malformed submission is a no-op (no attempt recorded), correct/incorrect update in-memory attempt flow and `elapsedMs` captured passively
-- [ ] T020 [P] [US1] Write jsdom UI tests in `tests/ui/challenge.test.js`: lesson renders before first challenge; correct→confirm+advance; wrong→reveal answer + derivation; malformed→format reminder; keyboard-only submission works
+- [X] T017 [P] [US1] Write generation/grading property tests in `tests/property/generate.props.test.js`: every `generateChallenge` output grades its canonical answer correct, exactly one correct MC option, and all distractors grade incorrect & distinct (contracts/engine.md #4, #5)
+- [X] T018 [P] [US1] Write unit tests for `grade`/`explain` in `tests/unit/grade.test.js`: equivalent-format acceptance, malformed → `EngineError`, explanation steps present and correct for /31,/32
+- [X] T019 [P] [US1] Write session unit tests in `tests/unit/session.test.js`: malformed submission is a no-op (no attempt recorded), correct/incorrect update in-memory attempt flow and `elapsedMs` captured passively
+- [X] T020 [P] [US1] Write jsdom UI tests in `tests/ui/challenge.test.js`: lesson renders before first challenge; correct→confirm+advance; wrong→reveal answer + derivation; malformed→format reminder; keyboard-only submission works
 
 ### Implementation for User Story 1
 
-- [ ] T021 [US1] Implement `src/engine/generate.js`: `generateChallenge(conceptId, tierId, entryMode, rng)` producing engine-validated challenges (FR-013) and `makeDistractors` modeling named misconceptions (off-by-one host, wrong octet, network↔broadcast swap)
-- [ ] T022 [US1] Implement `grade` and `explain` in the engine and export `generate`, `grade`, `explain` from `src/engine/index.js` (completes contracts/engine.md surface)
-- [ ] T023 [P] [US1] Implement initial content in `src/game/content.js`: lessons + challenge generators for the first concepts (`binary-decimal`, `mask-cidr`, `network-broadcast`) with per-concept entry-mode scaffolding (MC→free-text) per FR-017
-- [ ] T024 [US1] Implement `src/game/session.js`: current-challenge flow, submit→grade, malformed no-op handling, passive `elapsedMs`, in-memory attempt/stats (no persistence yet)
-- [ ] T025 [P] [US1] Implement `src/ui/render.js`: lesson, challenge (MC + free-text), and feedback screens with consistent notation, ARIA live region, and text+icon (non-color) status
-- [ ] T026 [P] [US1] Implement `src/ui/input.js`: keyboard handling and answer capture for MC and free-text entry
-- [ ] T027 [US1] Implement `src/ui/app.js`: bootstrap that wires `ui → game → engine` and drives the lesson→challenge→feedback loop; mount from `index.html`
-- [ ] T028 [US1] Style the US1 screens in `styles/main.css` (focus rings, status icons/shapes, WCAG AA contrast)
-- [ ] T029 [US1] Run US1 quickstart steps + `npm test`; confirm all US1 tests green and feedback renders <100ms
+- [X] T021 [US1] Implement `src/engine/generate.js`: `generateChallenge(conceptId, tierId, entryMode, rng)` producing engine-validated challenges (FR-013) and `makeDistractors` modeling named misconceptions (off-by-one host, wrong octet, network↔broadcast swap)
+- [X] T022 [US1] Implement `grade` and `explain` in the engine and export `generate`, `grade`, `explain` from `src/engine/index.js` (completes contracts/engine.md surface)
+- [X] T023 [P] [US1] Implement initial content in `src/game/content.js`: lessons + challenge generators for the first concepts (`binary-decimal`, `mask-cidr`, `network-broadcast`) with per-concept entry-mode scaffolding (MC→free-text) per FR-017
+- [X] T024 [US1] Implement `src/game/session.js`: current-challenge flow, submit→grade, malformed no-op handling, passive `elapsedMs`, in-memory attempt/stats (no persistence yet)
+- [X] T025 [P] [US1] Implement `src/ui/render.js`: lesson, challenge (MC + free-text), and feedback screens with consistent notation, ARIA live region, and text+icon (non-color) status
+- [X] T026 [P] [US1] Implement `src/ui/input.js`: keyboard handling and answer capture for MC and free-text entry
+- [X] T027 [US1] Implement `src/ui/app.js`: bootstrap that wires `ui → game → engine` and drives the lesson→challenge→feedback loop; mount from `index.html`
+- [X] T028 [US1] Style the US1 screens in `styles/main.css` (focus rings, status icons/shapes, WCAG AA contrast)
+- [X] T029 [US1] Run US1 quickstart steps + `npm test`; confirm all US1 tests green and feedback renders <100ms
 
 **Checkpoint**: MVP complete — a learner can practice and learn from explained feedback end-to-end.
 
